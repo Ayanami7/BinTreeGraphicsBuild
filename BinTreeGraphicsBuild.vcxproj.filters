@@ -21,6 +21,9 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="Config Files">
+      <UniqueIdentifier>{6695229f-1fac-423d-bc70-c803ec6a91e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,6 +44,14 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <None Include="README.md" />
+    <None Include=".gitignore">
+      <Filter>Config Files</Filter>
+    </None>
+    <None Include="README.md">
+      <Filter>Config Files</Filter>
+    </None>
+    <None Include=".editorconfig">
+      <Filter>Config Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
