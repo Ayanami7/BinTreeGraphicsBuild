@@ -1,11 +1,15 @@
 #pragma once
 
 #include <QWidget>
-#include <QMouseEvent>
 #include <QPoint>
-#include <QPainter>
 #include <QDebug>
+#include <QPainter>
+#include <QMouseEvent>
+#include <QPropertyAnimation>
 #include "ui_MainWindow.h"
+#include "MyButton.h"
+#include "MenuWidget.h"
+#include "DisplayWidget.h"
 
 class MainWindow : public QWidget
 {
@@ -15,19 +19,30 @@ public:
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 
-	//重写无边框窗口的鼠标拖动规则
+	//閲嶅啓鏃犺竟妗嗙獥鍙ｇ殑榧犳爣鎷栧姩瑙勫垯
 	virtual void mouseMoveEvent(QMouseEvent* event);
 	virtual void mousePressEvent(QMouseEvent* event);
 	virtual void mouseReleaseEvent(QMouseEvent* event);
 
 	virtual void paintEvent(QPaintEvent* event);
 
+protected slots:
+	void openMenu();
 
-
-private slots:
-	void on_closeButton_clicked();
 private:
+	int Radius = 25;
 	QPoint m_lastpos;
+	bool m_menu_hidden = true;
 	bool m_pressed = false;
+	QPropertyAnimation* slideProperty= nullptr;
+
+	//鎺т欢
+	MyButton* closeBtn;
+	MyButton* openMenuBtn;
+	MyButton* closeMenuBtn;
+	MyButton* settingBtn;
+	DisplayWidget* displayWidget;
+	MenuWidget* menuWidget;
+
 	Ui::MainWindowClass ui;
 };

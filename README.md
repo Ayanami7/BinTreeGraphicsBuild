@@ -1,1 +1,3 @@
-一个基于Qt框架的二叉树可视化程序
+# Visual Binary Tree
+
+Based on the Qt Framwork
