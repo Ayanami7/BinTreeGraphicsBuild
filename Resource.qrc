@@ -4,5 +4,6 @@
         <file>resource/img/openMenu.png</file>
         <file>resource/img/setting.png</file>
         <file>resource/img/closeMenu.png</file>
+        <file>resource/img/github.png</file>
     </qresource>
 </RCC>

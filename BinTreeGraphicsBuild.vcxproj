@@ -93,6 +93,8 @@
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MenuWidget.cpp" />
     <ClCompile Include="MyButton.cpp" />
+    <ClCompile Include="MyDialog.cpp" />
+    <ClCompile Include="partWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h" />
@@ -116,6 +118,12 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MenuWidget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="MyDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="PartWidget.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

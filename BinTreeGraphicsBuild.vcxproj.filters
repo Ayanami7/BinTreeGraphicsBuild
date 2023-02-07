@@ -41,6 +41,12 @@
     <ClCompile Include="MenuWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MyDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="partWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="MainWindow.ui">
@@ -58,6 +64,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="MenuWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="MyDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="PartWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

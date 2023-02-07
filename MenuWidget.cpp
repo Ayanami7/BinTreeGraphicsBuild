@@ -19,7 +19,7 @@ void MenuWidget::paintEvent(QPaintEvent* event)
 	QPen pen1(QColor(100, 100, 100, 190));
 	pen1.setWidth(3);
 	painter.setPen(pen1);
-	painter.setBrush(QBrush(Qt::white));
+	painter.setBrush(QBrush(QColor(250, 255, 250, 255)));
 	QRect rect = this->rect();
 	rect.setWidth(rect.width() - 1);
 	rect.setHeight(rect.height() - 1);

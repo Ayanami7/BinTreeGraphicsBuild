@@ -18,7 +18,7 @@ void DisplayWidget::paintEvent(QPaintEvent* event)
 	QRect rect = this->rect();
 	pen1.setWidth(2);
 	painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
-	painter.setBrush(QBrush(QColor(235, 235, 235, 255)));
+	painter.setBrush(QBrush(Qt::white));
 	painter.setPen(pen1);
 	rect.setWidth(rect.width());
 	rect.setHeight(rect.height());
