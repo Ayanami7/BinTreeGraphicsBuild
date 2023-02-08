@@ -21,7 +21,7 @@ void PartWidget::paintEvent(QPaintEvent* event)
 	painter.setPen(pen1);
 	painter.setBrush(QBrush(color));
 	QRect rect = this->rect();
-	rect.setWidth(rect.width() - 1);
-	rect.setHeight(rect.height() - 1);;
+	rect.setWidth(rect.width());
+	rect.setHeight(rect.height());;
 	painter.drawRoundedRect(rect, Radius, Radius);
 }

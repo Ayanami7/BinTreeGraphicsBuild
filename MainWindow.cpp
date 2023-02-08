@@ -9,29 +9,32 @@ MainWindow::MainWindow(QWidget *parent)
 	setWindowFlags(Qt::FramelessWindowHint);
 	setAttribute(Qt::WA_TranslucentBackground);
 
-	//关闭按钮
+	//close button
 	closeBtn = new MyButton(":/image/resource/img/close.png", 40);
 	closeBtn->setParent(this);
 	closeBtn->move(1530, 30);
 	connect(closeBtn, &MyButton::clicked, this, &MainWindow::close);
 
-	//设置按钮
+	//setting button
 	settingBtn = new MyButton(":/image/resource/img/setting.png", 50);
 	settingBtn->setParent(this);
 	settingBtn->move(1490, 890);
 	connect(settingBtn, &MyButton::clicked, this, &MainWindow::openMenu);
 
-	//GitHub图标
-	githubBtn = new MyButton(":/image/resource/img/github.png", 50);
-	githubBtn->setParent(this);
-	githubBtn->move(1410, 890);
-	//connect(settingBtn, &MyButton::clicked, this, &MainWindow::openMenu);
+	//GitHub button and Widget
+	gitBtn = new MyButton(":/image/resource/img/github.png", 50);
+	gitBtn->setParent(this);
+	gitBtn->move(1430, 890);
 
-	//显示窗口
+	gitDialog = new MyDialog(400, 300, 20, false);
+	gitDialog->setCloseBtn();
+	connect(gitBtn, &MyButton::clicked, this, &MainWindow::openGitDialog);
+	
+	//display widget
 	displayWidget = new DisplayWidget(1080, 720, 15, this);
 	displayWidget->move(60, titleHeight);
 
-	//标题栏
+	//title bar
 	QString title_str = "BinTree VisualBuild";
 	QFont title_font("Sitka Display", 32, 50, true);
 	QLabel* title = new QLabel(title_str, this);
@@ -40,20 +43,18 @@ MainWindow::MainWindow(QWidget *parent)
 	title->move(60, 35);
 	title->show();
 
-	//菜单窗口
+	//menu widget (slide)
 	menuWidget = new MenuWidget(500, 960, 25, this);
 	menuWidget->move(-menuWidget->width(), 0);
 	slideProperty = new QPropertyAnimation(menuWidget, "geometry");
 
-	//关闭菜单按钮
+	//close menuwidget button
 	closeMenuBtn = new MyButton(":/image/resource/img/closeMenu.png", 40);
 	closeMenuBtn->setParent(menuWidget);
 	closeMenuBtn->move(30, 30);
 	connect(closeMenuBtn, &MyButton::clicked, this, &MainWindow::openMenu);
-	
 
-
-	//属性栏
+	//property bar
 	QFont font1("Sitka Display", 18, 50);
 	QLabel* lab1 = new QLabel("Property", this);
 	lab1->setFont(font1);
@@ -61,7 +62,13 @@ MainWindow::MainWindow(QWidget *parent)
 	lab1->move(1190, 150);
 	lab1->show();
 
-	infoWidget = new PartWidget(360, 240, 10, QColor(Qt::white), this);
+	QLabel* lab2 = new QLabel("Log", this);
+	lab2->setFont(font1);
+	lab2->resize(120, 40);
+	lab2->move(1190, 150);
+	lab2->show();
+
+	infoWidget = new PartWidget(360, 240, 20, QColor(Qt::white), this);
 	infoWidget->move(1190, 220);
 
 }
@@ -148,3 +155,9 @@ void MainWindow::openMenu()
 		m_menu_hidden = !m_menu_hidden;
 	}
 }
+
+void MainWindow::openGitDialog()
+{
+	gitDialog->exec();
+}
+

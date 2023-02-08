@@ -6,19 +6,12 @@ MyDialog::MyDialog(int w, int h, int r, QWidget* parent)
 	this->setFixedSize(w, h);
 	setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
 	setAttribute(Qt::WA_TranslucentBackground);
-
-	closeBtn = new MyButton(":/image/resource/img/close.png", 30);
-	closeBtn->setParent(this);
-	closeBtn->move(w - 30 - 15, 15);
-	connect(closeBtn, &MyButton::clicked, this, &MyDialog::close);
 }
 
 MyDialog::~MyDialog()
 {
 	delete closeBtn;
 }
-
-
 
 void MyDialog::mousePressEvent(QMouseEvent* event)
 {
@@ -58,12 +51,20 @@ void MyDialog::paintEvent(QPaintEvent* event)
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
 
-	QPen pen1(QColor(100, 100, 100, 100));
-	pen1.setWidth(4);
+	QPen pen1(QColor(0, 0, 0, 255));
+	pen1.setWidth(2);
 	painter.setPen(pen1);
-	painter.setBrush(QBrush(Qt::white));
+	painter.setBrush(QBrush(QColor(250, 255, 250, 255)));
 	QRect rect = this->rect();
 	rect.setWidth(rect.width() - 1);
-	rect.setHeight(rect.height() - 1);
+	rect.setHeight(rect.height() - 1);;
 	painter.drawRoundedRect(rect, Radius, Radius);
+}
+
+void MyDialog::setCloseBtn() 
+{
+	closeBtn = new MyButton(":/image/resource/img/close.png", 30);
+	closeBtn->setParent(this);
+	closeBtn->move(this->width() - 30 - 15, 15);
+	connect(closeBtn, &MyButton::clicked, this, &MyDialog::close);
 }

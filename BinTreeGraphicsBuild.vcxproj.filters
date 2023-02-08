@@ -24,6 +24,12 @@
     <Filter Include="Config Files">
       <UniqueIdentifier>{6695229f-1fac-423d-bc70-c803ec6a91e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Special Widget">
+      <UniqueIdentifier>{d307a44b-1b53-40ee-8382-8c53cd7d8d80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\General Widget">
+      <UniqueIdentifier>{7fd905bc-81bd-40fb-8d65-1ebe730e1c9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,23 +60,23 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="MainWindow.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="MyButton.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="DisplayWidget.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Special Widget</Filter>
+    </QtMoc>
+    <QtMoc Include="MainWindow.h">
+      <Filter>Header Files\Special Widget</Filter>
     </QtMoc>
     <QtMoc Include="MenuWidget.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Special Widget</Filter>
+    </QtMoc>
+    <QtMoc Include="MyButton.h">
+      <Filter>Header Files\General Widget</Filter>
     </QtMoc>
     <QtMoc Include="MyDialog.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\General Widget</Filter>
     </QtMoc>
     <QtMoc Include="PartWidget.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\General Widget</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

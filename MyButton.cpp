@@ -31,3 +31,21 @@ MyButton::MyButton(QString imgSrc, int width, int height)
 
 MyButton::~MyButton()
 {}
+
+void MyButton::setHover(bool flag) { this->hoverEnable = flag; }
+
+void MyButton::enterEvent(QEvent* event)
+{
+	if (this->hoverEnable)
+	{
+		emit entered();
+	}
+}
+
+void MyButton::leaveEvent(QEvent* event)
+{
+	if (this->hoverEnable)
+	{
+		emit leave();
+	}
+}

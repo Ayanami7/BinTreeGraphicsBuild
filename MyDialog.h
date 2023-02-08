@@ -19,8 +19,11 @@ public:
 	virtual void mouseReleaseEvent(QMouseEvent* event);
 
 	virtual void paintEvent(QPaintEvent* event);
+
+	void setCloseBtn();		//手动添加关闭键
+
 private:
-	int Radius = 15;
+	int Radius;
 	int titleHeight = 60;
 	QPoint m_lastpos;
 	bool m_pressed = false;

@@ -31,9 +31,10 @@ public:
 
 protected slots:
 	void openMenu();
+	void openGitDialog();
 
 private:
-	int Radius = 25;
+	int Radius = 30;
 	int titleHeight = 160;
 	QPoint m_lastpos;
 	bool m_menu_hidden = true;
@@ -44,8 +45,9 @@ private:
 	MyButton* closeBtn;
 	MyButton* settingBtn;
 	MyButton* closeMenuBtn;
-	MyButton* githubBtn;
+	MyButton* gitBtn;
 
+	MyDialog* gitDialog;
 	DisplayWidget* displayWidget;
 	MenuWidget* menuWidget;
 	PartWidget* infoWidget;
