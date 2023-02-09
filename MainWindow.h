@@ -7,6 +7,8 @@
 #include <QMouseEvent>
 #include <QPropertyAnimation>
 #include <QLabel>
+#include <QPixMap>
+#include <QTimer>
 #include "ui_MainWindow.h"
 #include "MyButton.h"
 #include "MyDialog.h"
@@ -29,9 +31,14 @@ public:
 
 	virtual void paintEvent(QPaintEvent* event);
 
+	void setGitDialog();
+	void setLogDialog();
+	void setPropertyWidget();
+
 protected slots:
 	void openMenu();
 	void openGitDialog();
+	void openLogDialog();
 
 private:
 	int Radius = 30;
@@ -41,12 +48,14 @@ private:
 	bool m_pressed = false;
 	QPropertyAnimation* slideProperty= nullptr;
 
-	//控件
+	//widget pointer
 	MyButton* closeBtn;
 	MyButton* settingBtn;
 	MyButton* closeMenuBtn;
 	MyButton* gitBtn;
+	MyButton* logBtn;
 
+	MyDialog* logDialog;
 	MyDialog* gitDialog;
 	DisplayWidget* displayWidget;
 	MenuWidget* menuWidget;

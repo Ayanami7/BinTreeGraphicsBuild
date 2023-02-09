@@ -5,5 +5,8 @@
         <file>resource/img/setting.png</file>
         <file>resource/img/closeMenu.png</file>
         <file>resource/img/github.png</file>
+        <file>resource/img/github2.png</file>
+        <file>resource/img/more.png</file>
+        <file>resource/img/atri.png</file>
     </qresource>
 </RCC>

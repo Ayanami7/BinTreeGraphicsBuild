@@ -21,14 +21,11 @@ MainWindow::MainWindow(QWidget *parent)
 	settingBtn->move(1490, 890);
 	connect(settingBtn, &MyButton::clicked, this, &MainWindow::openMenu);
 
-	//GitHub button and Widget
-	gitBtn = new MyButton(":/image/resource/img/github.png", 50);
-	gitBtn->setParent(this);
-	gitBtn->move(1430, 890);
+	//log button and Widget
+	this->setLogDialog();
 
-	gitDialog = new MyDialog(400, 300, 20, false);
-	gitDialog->setCloseBtn();
-	connect(gitBtn, &MyButton::clicked, this, &MainWindow::openGitDialog);
+	//GitHub button and Widget
+	this->setGitDialog();
 	
 	//display widget
 	displayWidget = new DisplayWidget(1080, 720, 15, this);
@@ -55,22 +52,7 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(closeMenuBtn, &MyButton::clicked, this, &MainWindow::openMenu);
 
 	//property bar
-	QFont font1("Sitka Display", 18, 50);
-	QLabel* lab1 = new QLabel("Property", this);
-	lab1->setFont(font1);
-	lab1->resize(120, 40);
-	lab1->move(1190, 150);
-	lab1->show();
-
-	QLabel* lab2 = new QLabel("Log", this);
-	lab2->setFont(font1);
-	lab2->resize(120, 40);
-	lab2->move(1190, 150);
-	lab2->show();
-
-	infoWidget = new PartWidget(360, 240, 20, QColor(Qt::white), this);
-	infoWidget->move(1190, 220);
-
+	this->setPropertyWidget();
 }
 
 MainWindow::~MainWindow()
@@ -136,6 +118,99 @@ void MainWindow::paintEvent(QPaintEvent* event)
 	painter.drawRoundedRect(rect, Radius, Radius);
 }
 
+void MainWindow::setGitDialog()
+{
+	gitBtn = new MyButton(":/image/resource/img/github.png", 50);
+	gitBtn->setParent(this);
+	gitBtn->move(1430, 890);
+
+	gitDialog = new MyDialog(540, 320, 20, this);
+	gitDialog->setCloseBtn();
+	connect(gitBtn, &MyButton::clicked, this, &MainWindow::openGitDialog);
+
+	QLabel* lab1 = new QLabel(tr("<a href = https://github.com/Ayanami7/BinTreeGraphicsBuild><img src=:/image/resource/img/atri.png width =128 height=128></a>"), gitDialog);
+	lab1->setGeometry(206, 50, 128, 128);
+	//QPixmap pic(":/image/resource/img/github2.png");
+	//lab1->setPixmap(pic.scaled(128,128));
+	lab1->setOpenExternalLinks(true);
+
+	QLabel* lab2 = new QLabel("<a style='color: black' href = https://github.com/Ayanami7/BinTreeGraphicsBuild>https://github.com/Ayanami7/BinTreeGraphicsBuild",gitDialog);
+	QFont font1("Sitka Display", 12, 50, true);
+	font1.setUnderline(true);
+	lab2->setFont(font1);
+	lab2->resize(440, 30);
+	lab2->move(60, 220);
+	lab2->setOpenExternalLinks(true);
+}
+
+void MainWindow::setLogDialog()
+{
+	logBtn = new MyButton(":/image/resource/img/more.png", 50);
+	logBtn->setParent(this);
+	logBtn->move(1370, 890);
+
+	logDialog = new MyDialog(400, 800, 20, this);
+	logDialog->setCloseBtn();
+	connect(logBtn, &MyButton::clicked, this, &MainWindow::openLogDialog);
+
+}
+
+void MainWindow::setPropertyWidget()
+{
+	QFont font1("Sitka Display", 18, 50);
+	QLabel* title = new QLabel("Property", this);
+	title->setFont(font1);
+	title->resize(120, 40);
+	title->move(1160, 150);
+	title->show();
+
+	infoWidget = new PartWidget(420, 240, 10, QColor(QColor(250, 255, 250, 255)), this);
+	infoWidget->move(1160, 200);
+
+	QFont font2("微软雅黑", 12, 50);
+	font2.setBold(true);
+
+	QLabel* lab1 = new QLabel("text1", infoWidget);
+	lab1->setFont(font2);
+	lab1->resize(240, 60);
+	lab1->move(20, 0);
+	QLabel* lab2 = new QLabel("text2", infoWidget);
+	lab2->setFont(font2);
+	lab2->resize(240, 60);
+	lab2->move(20, 60);
+	QLabel* lab3 = new QLabel("text3", infoWidget);
+	lab3->setFont(font2);
+	lab3->resize(240, 60);
+	lab3->move(20, 120);
+	QLabel* lab4 = new QLabel("text4", infoWidget);
+	lab4->setFont(font2);
+	lab4->resize(240, 60);
+	lab4->move(20, 180);
+
+	QLabel* lab5 = new QLabel("data1", infoWidget);
+	lab5->setFont(font2);
+	lab5->setAlignment(Qt::AlignRight | Qt::AlignVCenter);	//居中右对齐
+	lab5->resize(140, 60);
+	lab5->move(260, 0);
+	QLabel* lab6 = new QLabel("data2", infoWidget);
+	lab6->setFont(font2);
+	lab6->setAlignment(Qt::AlignRight | Qt::AlignVCenter);	//居中右对齐
+	lab6->resize(140, 60);
+	lab6->move(260, 60);
+	QLabel* lab7 = new QLabel("data3", infoWidget);
+	lab7->setFont(font2);
+	lab7->setAlignment(Qt::AlignRight | Qt::AlignVCenter);	//居中右对齐
+	lab7->resize(140, 60);
+	lab7->move(260, 120);
+	QLabel* lab8 = new QLabel("data4", infoWidget);
+	lab8->setFont(font2);
+	lab8->setAlignment(Qt::AlignRight | Qt::AlignVCenter);	//居中右对齐
+	lab8->resize(140, 60);
+	lab8->move(260, 180);
+
+}
+
+//signal slots
 void MainWindow::openMenu()
 {
 	if (m_menu_hidden)
@@ -159,5 +234,10 @@ void MainWindow::openMenu()
 void MainWindow::openGitDialog()
 {
 	gitDialog->exec();
+}
+
+void MainWindow::openLogDialog()
+{
+	logDialog->show();
 }
 

@@ -10,7 +10,6 @@ MyDialog::MyDialog(int w, int h, int r, QWidget* parent)
 
 MyDialog::~MyDialog()
 {
-	delete closeBtn;
 }
 
 void MyDialog::mousePressEvent(QMouseEvent* event)

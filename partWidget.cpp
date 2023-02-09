@@ -24,4 +24,12 @@ void PartWidget::paintEvent(QPaintEvent* event)
 	rect.setWidth(rect.width());
 	rect.setHeight(rect.height());;
 	painter.drawRoundedRect(rect, Radius, Radius);
+
+	QPen pen2(QColor(100, 100, 100, 150));
+	pen1.setWidth(1);
+	painter.setPen(pen2);
+	int h = this->height() / 4;
+	painter.drawLine(QPoint(0, h), QPoint(this->width(), h));
+	painter.drawLine(QPoint(0, h * 2), QPoint(this->width(), h * 2));
+	painter.drawLine(QPoint(0, h * 3), QPoint(this->width(), h * 3));
 }
