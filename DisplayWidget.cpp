@@ -1,4 +1,5 @@
 #include "DisplayWidget.h"
+#include "GraphicTree.h"
 
 DisplayWidget::DisplayWidget(int w, int h, int r, QWidget* parent)
 	: QWidget(parent), Radius(r)
@@ -6,6 +7,10 @@ DisplayWidget::DisplayWidget(int w, int h, int r, QWidget* parent)
 	setFixedSize(w, h);
 	setWindowFlags(Qt::FramelessWindowHint);
 	setAttribute(Qt::WA_TranslucentBackground);
+
+	GraphicTreeView *view = new GraphicTreeView;
+
+	view->setParent(this);
 }
 
 DisplayWidget::~DisplayWidget()

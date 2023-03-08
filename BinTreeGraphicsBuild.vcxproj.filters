@@ -53,6 +53,9 @@
     <ClCompile Include="partWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GraphicTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="MainWindow.ui">
@@ -77,6 +80,9 @@
     </QtMoc>
     <QtMoc Include="PartWidget.h">
       <Filter>Header Files\General Widget</Filter>
+    </QtMoc>
+    <QtMoc Include="GraphicTree.h">
+      <Filter>Header Files\Special Widget</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

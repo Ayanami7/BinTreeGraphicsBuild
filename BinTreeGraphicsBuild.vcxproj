@@ -89,6 +89,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DisplayWidget.cpp" />
+    <QtMoc Include="GraphicTree.h" />
+    <ClCompile Include="GraphicTree.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MenuWidget.cpp" />

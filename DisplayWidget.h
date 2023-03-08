@@ -2,6 +2,8 @@
 
 #include <QWidget>
 #include <QPainter>
+#include <QGraphicsScene>
+#include <QGraphicsView>
 
 class DisplayWidget : public QWidget
 {
