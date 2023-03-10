@@ -12,7 +12,6 @@ class MyButton : public QPushButton
 
 public:
 	MyButton(QString imgSrc, int len);
-	MyButton(QString imgSrc, int width, int height);
 	~MyButton();
 
 	virtual void enterEvent(QEvent* event);

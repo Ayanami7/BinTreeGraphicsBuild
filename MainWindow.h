@@ -32,6 +32,8 @@ public:
 	virtual void paintEvent(QPaintEvent* event);
 
 private:
+	void resetType();
+
 	void setGitDialog();
 	void setLogDialog();
 	void setPropertyWidget();
@@ -40,7 +42,9 @@ protected slots:
 	void openMenu();
 	void openGitDialog();
 	void openLogDialog();
-	void update();
+	void updateUpHalf();
+	//void updateDownHalf();
+	void changeType();
 
 private:
 	int Radius = 30;
@@ -51,11 +55,11 @@ private:
 	QPropertyAnimation* slideProperty= nullptr;
 
 	//widget pointer
-	MyButton* closeBtn;
-	MyButton* settingBtn;
-	MyButton* closeMenuBtn;
-	MyButton* gitBtn;
-	MyButton* logBtn;
+
+	QPushButton* traverBtn1;
+	QPushButton* traverBtn2;
+	QPushButton* traverBtn3;
+	QPushButton* traverBtn4;
 
 	MyDialog* logDialog;
 	MyDialog* gitDialog;

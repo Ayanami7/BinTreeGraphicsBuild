@@ -20,16 +20,9 @@ GraphicTreeView::GraphicTreeView()
 	this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);	//关闭竖向滚轮
 	this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);	//关闭横向滚轮
 
-	root = addVex(QPoint(525, 150));
+	root = addVex(QPoint(525, 120));
 	strtVex = root;
-	/* test data */
-	//GraphicTreeVertex* vex1 = new GraphicTreeVertex(QPoint(50, 50), 20, 0);
-	//GraphicTreeVertex* vex2 = new GraphicTreeVertex(QPoint(200, 200), 20, 1);
-	//this->myScene->addItem(vex1);
-	//this->myScene->addItem(vex2);
-	//GraphicTreeLine* line1 = new GraphicTreeLine(vex1, vex2);
-	//this->myScene->addItem(line1);
-
+	
 }
 
 GraphicTreeVertex* GraphicTreeView::addVex(QPointF center, qreal radius)
@@ -126,7 +119,6 @@ bool GraphicTreeView::inVertex(QPoint pos, GraphicTreeVertex* vex)
 		return false;
 }
 
-
 void GraphicTreeView::drawSketchLine(QPointF start, QPointF end)
 {
 	QGraphicsLineItem* newLine = new QGraphicsLineItem(start.x(), start.y(), end.x(), end.y());
@@ -147,6 +139,51 @@ void GraphicTreeView::clearSketchLine()
 		this->myScene->removeItem(sketchItem);	//删除虚线并置空
 		sketchItem = nullptr;				
 	}
+}
+
+void GraphicTreeView::predTraversal(GraphicTreeVertex* vex)
+{
+	if (vex == nullptr)
+		return;
+	qDebug() << vex->nameText;
+	predTraversal(vex->left);
+	predTraversal(vex->right);
+}
+
+void GraphicTreeView::inTraversal(GraphicTreeVertex* vex)
+{
+	if (vex == nullptr)
+		return;
+	inTraversal(vex->left);
+	qDebug() << vex->nameText;
+	inTraversal(vex->right);
+}
+
+void GraphicTreeView::succTraversal(GraphicTreeVertex* vex)
+{
+	if (vex == nullptr)
+		return;
+	succTraversal(vex->left);
+	succTraversal(vex->right);
+	qDebug() << vex->nameText;
+}
+
+void GraphicTreeView::orderTraversal(GraphicTreeVertex* vex)
+{
+
+}
+
+void GraphicTreeView::startTraversal()
+{
+	emit build();					//通知系统开始构建二叉树
+	if (traversalType == 1 || 0)	//若不选择则默认为先序
+		predTraversal(root);
+	else if (traversalType == 2)
+		inTraversal(root);
+	else if (traversalType == 3)
+		succTraversal(root);
+	else if (traversalType == 4)
+		orderTraversal(root);
 }
 
 

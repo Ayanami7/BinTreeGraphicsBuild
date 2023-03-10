@@ -10,13 +10,13 @@ MainWindow::MainWindow(QWidget *parent)
 	setAttribute(Qt::WA_TranslucentBackground);
 
 	//close button
-	closeBtn = new MyButton(":/image/resource/img/close.png", 40);
+	MyButton* closeBtn = new MyButton(":/image/resource/img/close.png", 40);
 	closeBtn->setParent(this);
 	closeBtn->move(1530, 30);
 	connect(closeBtn, &MyButton::clicked, this, &MainWindow::close);
 
 	//setting button
-	settingBtn = new MyButton(":/image/resource/img/setting.png", 50);
+	MyButton* settingBtn = new MyButton(":/image/resource/img/setting.png", 50);
 	settingBtn->setParent(this);
 	settingBtn->move(1490, 890);
 	connect(settingBtn, &MyButton::clicked, this, &MainWindow::openMenu);
@@ -46,15 +46,68 @@ MainWindow::MainWindow(QWidget *parent)
 	slideProperty = new QPropertyAnimation(menuWidget, "geometry");
 
 	//close menuwidget button
-	closeMenuBtn = new MyButton(":/image/resource/img/closeMenu.png", 40);
+	MyButton* closeMenuBtn = new MyButton(":/image/resource/img/closeMenu.png", 40);
 	closeMenuBtn->setParent(menuWidget);
 	closeMenuBtn->move(30, 30);
 	connect(closeMenuBtn, &MyButton::clicked, this, &MainWindow::openMenu);
 
 	//property bar
 	this->setPropertyWidget();
-	connect(displayWidget->view(), &GraphicTreeView::itemChange, this, &MainWindow::update);
+	connect(displayWidget->view(), &GraphicTreeView::itemChange, this, &MainWindow::updateUpHalf);
 
+	QFont font1("Sitka Display", 18, 50);
+
+	traverBtn1 = new QPushButton();
+	traverBtn1->setText("pred");
+	traverBtn1->setParent(this);
+	traverBtn1->setFont(font1);
+	traverBtn1->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
+		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+	traverBtn1->resize(180, 60);
+	traverBtn1->move(1170, 500);
+	connect(traverBtn1, &QPushButton::clicked, this, [=]() {this->displayWidget->view()->Type() = 1; });
+	connect(traverBtn1, &QPushButton::clicked, this, &MainWindow::changeType);
+
+	traverBtn2 = new QPushButton();
+	traverBtn2->setText("in");
+	traverBtn2->setParent(this);
+	traverBtn2->setFont(font1);
+	traverBtn2->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
+		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+	traverBtn2->resize(180, 60);
+	traverBtn2->move(1380, 500);
+	connect(traverBtn2, &QPushButton::clicked, this, [=]() {this->displayWidget->view()->Type() = 2; });
+	connect(traverBtn2, &QPushButton::clicked, this, &MainWindow::changeType);
+
+	traverBtn3= new QPushButton();
+	traverBtn3->setText("succ");
+	traverBtn3->setParent(this);
+	traverBtn3->setFont(font1);
+	traverBtn3->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
+		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+	traverBtn3->resize(180, 60);
+	traverBtn3->move(1170, 580);
+	connect(traverBtn3, &QPushButton::clicked, this, [=]() {this->displayWidget->view()->Type() = 3; });
+	connect(traverBtn3, &QPushButton::clicked, this, &MainWindow::changeType);
+
+	traverBtn4 = new QPushButton();
+	traverBtn4->setText("order");
+	traverBtn4->setParent(this);
+	traverBtn4->setFont(font1);
+	traverBtn4->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
+		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+	traverBtn4->resize(180, 60);
+	traverBtn4->move(1380, 580);
+	connect(traverBtn4, &QPushButton::clicked, this, [=]() {this->displayWidget->view()->Type() = 4; });
+	connect(traverBtn4, &QPushButton::clicked, this, &MainWindow::changeType);
+
+	connect(this->displayWidget->view(), &GraphicTreeView::build, this, &MainWindow::changeType);
+
+	//start button
+	MyButton* startBtn = new MyButton(":/image/resource/img/start.png", 90);
+	startBtn->setParent(this);
+	startBtn->move(1300, 670);
+	connect(startBtn, &MyButton::clicked, displayWidget->view(), &GraphicTreeView::startTraversal);
 }
 
 MainWindow::~MainWindow()
@@ -122,7 +175,7 @@ void MainWindow::paintEvent(QPaintEvent* event)
 
 void MainWindow::setGitDialog()
 {
-	gitBtn = new MyButton(":/image/resource/img/github.png", 50);
+	MyButton* gitBtn = new MyButton(":/image/resource/img/github.png", 50);
 	gitBtn->setParent(this);
 	gitBtn->move(1430, 890);
 
@@ -147,7 +200,7 @@ void MainWindow::setGitDialog()
 
 void MainWindow::setLogDialog()
 {
-	logBtn = new MyButton(":/image/resource/img/more.png", 50);
+	MyButton* logBtn = new MyButton(":/image/resource/img/more.png", 50);
 	logBtn->setParent(this);
 	logBtn->move(1370, 890);
 
@@ -172,24 +225,22 @@ void MainWindow::setPropertyWidget()
 	QFont font2("微软雅黑", 12, 50);
 	font2.setBold(true);
 
-	QLabel* lab1 = new QLabel("vertex", infoWidget);
+	QLabel* lab1 = new QLabel("total vertexes", infoWidget);
 	lab1->setFont(font2);
 	lab1->resize(240, 60);
 	lab1->move(20, 0);
-	QLabel* lab2 = new QLabel("edge", infoWidget);
+	QLabel* lab2 = new QLabel("total edges", infoWidget);
 	lab2->setFont(font2);
 	lab2->resize(240, 60);
 	lab2->move(20, 60);
-	QLabel* lab3 = new QLabel("text3", infoWidget);
+	QLabel* lab3 = new QLabel("current depth", infoWidget);
 	lab3->setFont(font2);
 	lab3->resize(240, 60);
 	lab3->move(20, 120);
-	QLabel* lab4 = new QLabel("text4", infoWidget);
+	QLabel* lab4 = new QLabel("current ID", infoWidget);
 	lab4->setFont(font2);
 	lab4->resize(240, 60);
 	lab4->move(20, 180);
-
-	/* 需要添加实时刷新系统 */
 
 	lab5 = new QLabel("1", infoWidget);
 	lab5->setFont(font2);
@@ -217,13 +268,61 @@ void MainWindow::setPropertyWidget()
 
 }
 
-void MainWindow::update()
+void MainWindow::updateUpHalf()
 {
-	QString vexes_str = QString::asprintf("%d", this->displayWidget->view()->vexList.size());
-	QString edges_str = QString::asprintf("%d", this->displayWidget->view()->lineList.size());
+	QString vexes_str = QString::asprintf("%d", this->displayWidget->view()->vexSize());
+	QString edges_str = QString::asprintf("%d", this->displayWidget->view()->lineSize());
 	this->lab5->setText(vexes_str);
 	this->lab6->setText(edges_str);
 }
+
+void MainWindow::changeType()
+{
+	if (this->displayWidget->view()->Type() == 1)
+	{
+		resetType();
+		traverBtn1->setStyleSheet("QPushButton{background-color: rgb(119,136,153,150); border-radius: 15px;}"
+			"QPushButton:hover{background-color: rgb(121,205,205,90);}");
+	}
+	else if (this->displayWidget->view()->Type() == 2)
+	{
+		resetType();
+		traverBtn2->setStyleSheet("QPushButton{background-color: rgb(119,136,153,150); border-radius: 15px;}"
+			"QPushButton:hover{background-color: rgb(121,205,205,90);}");
+	}
+
+	else if (this->displayWidget->view()->Type() == 3)
+	{
+		resetType();
+		traverBtn3->setStyleSheet("QPushButton{background-color: rgb(119,136,153,150); border-radius: 15px;}"
+			"QPushButton:hover{background-color: rgb(121,205,205,90);}");
+	}
+
+	else if (this->displayWidget->view()->Type() == 4)
+	{
+		resetType();
+		traverBtn4->setStyleSheet("QPushButton{background-color: rgb(119,136,153,150); border-radius: 15px;}"
+			"QPushButton:hover{background-color: rgb(121,205,205,90);}");
+	}
+	else
+	{
+		traverBtn1->setStyleSheet("QPushButton{background-color: rgb(119,136,153,150); border-radius: 15px;}"
+			"QPushButton:hover{background-color: rgb(121,205,205,90);}");
+	}
+}
+
+void MainWindow::resetType()
+{
+	traverBtn1->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
+		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+	traverBtn2->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
+		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+	traverBtn3->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
+		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+	traverBtn4->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
+		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+}
+
 
 //signal slots
 void MainWindow::openMenu()

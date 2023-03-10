@@ -6,8 +6,8 @@
 #include <QGraphicsSimpleTextItem>
 #include <QMouseEvent>
 
+#include <QTime>
 #include <QTimeLine>
-
 
 class GraphicTreeView;
 class GraphicTreeVertex;
@@ -22,7 +22,10 @@ private:
 	QGraphicsScene* myScene;	//场景对象
 	QBrush regBrush = QBrush(QColor(108, 166, 205));
 
+	QTime* timer = nullptr;
+
 	/* For creating a binary tree */
+	int traversalType = 0;
 	int VexID = 0;
 	bool isCreating = false;
 	GraphicTreeVertex* root = nullptr;
@@ -39,16 +42,27 @@ private:
 	bool inVertex(QPoint pos, GraphicTreeVertex* vex);			//判断是否位于顶点内
 	void drawSketchLine(QPointF start, QPointF end);	//绘制虚线
 	void clearSketchLine();							//擦除虚线
+	void predTraversal(GraphicTreeVertex* vex);		//四种遍历方式
+	void inTraversal(GraphicTreeVertex* vex);
+	void succTraversal(GraphicTreeVertex* vex);
+	void orderTraversal(GraphicTreeVertex* vex);
 
-signals:
-	void itemChange();
-
-public:
-	/* 测试用 暂时未封装 */
 	QVector<GraphicTreeVertex*> vexList;	//总结点列表
 	QVector<GraphicTreeLine*> lineList;		//总边列表
 
+signals:
+	void itemChange();
+	void build();
+
+public slots:
+	void startTraversal();
+
+public:
+
 	GraphicTreeView();
+	const int vexSize() { return vexList.size(); }
+	const int lineSize() { return lineList.size(); }
+	int& Type() { return traversalType; }
 };
 
 //自定义顶点类
@@ -94,7 +108,7 @@ private:
 	Qt::PenStyle lineStyle = Qt::SolidLine;
 	Qt::PenCapStyle lineCapStyle = Qt::RoundCap;	//画笔端点风格
 	//QColor defaultColor = QColor(159, 182, 205);
-	QColor defaultColor = QColor(84, 255, 159);
+	QColor defaultColor = QColor(0,238,238);
 
 	QPen defaultPen;
 
