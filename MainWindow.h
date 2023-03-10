@@ -31,6 +31,7 @@ public:
 
 	virtual void paintEvent(QPaintEvent* event);
 
+private:
 	void setGitDialog();
 	void setLogDialog();
 	void setPropertyWidget();
@@ -39,6 +40,7 @@ protected slots:
 	void openMenu();
 	void openGitDialog();
 	void openLogDialog();
+	void update();
 
 private:
 	int Radius = 30;
@@ -60,6 +62,12 @@ private:
 	DisplayWidget* displayWidget;
 	MenuWidget* menuWidget;
 	PartWidget* infoWidget;
+
+	//property infomation
+	QLabel* lab5;
+	QLabel* lab6;
+	QLabel* lab7;
+	QLabel* lab8;
 
 	Ui::MainWindowClass ui;
 };

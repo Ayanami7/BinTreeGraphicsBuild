@@ -3,8 +3,11 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsEllipseItem>
+#include <QGraphicsSimpleTextItem>
+#include <QMouseEvent>
 
 #include <QTimeLine>
+
 
 class GraphicTreeView;
 class GraphicTreeVertex;
@@ -22,17 +25,29 @@ private:
 	/* For creating a binary tree */
 	int VexID = 0;
 	bool isCreating = false;
+	GraphicTreeVertex* root = nullptr;
+	GraphicTreeVertex* strtVex = nullptr;
+	QGraphicsItem* sketchItem = nullptr;
 
-	GraphicTreeVertex* addVex(QPointF center, qreal radius = 10);
+	GraphicTreeVertex* addVex(QPointF center, qreal radius = 15);
 	GraphicTreeLine* addLine(GraphicTreeVertex* start, GraphicTreeVertex* end);
 
 	void mousePressEvent(QMouseEvent* event);		//重写鼠标事件
 	void mouseMoveEvent(QMouseEvent* event);
 
-	QVector<GraphicTreeVertex*> vexList;
-	QVector<GraphicTreeLine*> lineList;
+	bool hasVacancy(GraphicTreeVertex* vex);			//判断是否有空位
+	bool inVertex(QPoint pos, GraphicTreeVertex* vex);			//判断是否位于顶点内
+	void drawSketchLine(QPointF start, QPointF end);	//绘制虚线
+	void clearSketchLine();							//擦除虚线
+
+signals:
+	void itemChange();
 
 public:
+	/* 测试用 暂时未封装 */
+	QVector<GraphicTreeVertex*> vexList;	//总结点列表
+	QVector<GraphicTreeLine*> lineList;		//总边列表
+
 	GraphicTreeView();
 };
 
@@ -45,6 +60,10 @@ private:
 	QBrush regBrush = QBrush(QColor(108, 166, 205));
 	QBrush visitedBrush = QBrush(QColor(162, 205, 90));
 	QFont nameFont = QFont("Sitka Display", 13, QFont::Normal, true);
+
+	/* for Animation */
+	QTimeLine* curAnimation = nullptr;
+	void startAnimation();
 
 public:
 	QPointF center;
@@ -59,6 +78,8 @@ public:
 	QVector<GraphicTreeVertex*> nexts;
 	GraphicTreeVertex* left = nullptr;
 	GraphicTreeVertex* right = nullptr;
+
+	void showAnimation();		//显示动画
 
 	GraphicTreeVertex(QPointF point, qreal r, int nameID, QGraphicsItem* parent = nullptr);
 	~GraphicTreeVertex();

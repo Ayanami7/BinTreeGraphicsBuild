@@ -1,5 +1,4 @@
 #include "DisplayWidget.h"
-#include "GraphicTree.h"
 
 DisplayWidget::DisplayWidget(int w, int h, int r, QWidget* parent)
 	: QWidget(parent), Radius(r)
@@ -8,9 +7,9 @@ DisplayWidget::DisplayWidget(int w, int h, int r, QWidget* parent)
 	setWindowFlags(Qt::FramelessWindowHint);
 	setAttribute(Qt::WA_TranslucentBackground);
 
-	GraphicTreeView *view = new GraphicTreeView;
+	myView = new GraphicTreeView;
 
-	view->setParent(this);
+	myView->setParent(this);
 }
 
 DisplayWidget::~DisplayWidget()
@@ -28,4 +27,9 @@ void DisplayWidget::paintEvent(QPaintEvent* event)
 	rect.setWidth(rect.width());
 	rect.setHeight(rect.height());
 	painter.drawRoundedRect(rect, Radius, Radius);
+}
+
+GraphicTreeView* DisplayWidget::view()
+{
+	return (myView != nullptr ? myView : nullptr);
 }

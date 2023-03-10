@@ -6,8 +6,8 @@ MyButton::MyButton(QString imgSrc, int len)
 	QPixmap mpic = pic.scaled(len, len);
 
 	/*Debug Code*/
-	QString str = QString("w:%1 h:%2").arg(mpic.width()).arg(mpic.height());
-	qDebug() << str;
+	//QString str = QString("w:%1 h:%2").arg(mpic.width()).arg(mpic.height());
+	//qDebug() << str;
 
 	this->setFixedSize(len, len);
 	this->setStyleSheet("QPushButton{border:none}");

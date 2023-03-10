@@ -53,6 +53,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 	//property bar
 	this->setPropertyWidget();
+	connect(displayWidget->view(), &GraphicTreeView::itemChange, this, &MainWindow::update);
+
 }
 
 MainWindow::~MainWindow()
@@ -170,11 +172,11 @@ void MainWindow::setPropertyWidget()
 	QFont font2("微软雅黑", 12, 50);
 	font2.setBold(true);
 
-	QLabel* lab1 = new QLabel("text1", infoWidget);
+	QLabel* lab1 = new QLabel("vertex", infoWidget);
 	lab1->setFont(font2);
 	lab1->resize(240, 60);
 	lab1->move(20, 0);
-	QLabel* lab2 = new QLabel("text2", infoWidget);
+	QLabel* lab2 = new QLabel("edge", infoWidget);
 	lab2->setFont(font2);
 	lab2->resize(240, 60);
 	lab2->move(20, 60);
@@ -187,27 +189,40 @@ void MainWindow::setPropertyWidget()
 	lab4->resize(240, 60);
 	lab4->move(20, 180);
 
-	QLabel* lab5 = new QLabel("data1", infoWidget);
+	/* 需要添加实时刷新系统 */
+
+	lab5 = new QLabel("1", infoWidget);
 	lab5->setFont(font2);
 	lab5->setAlignment(Qt::AlignRight | Qt::AlignVCenter);	//居中右对齐
 	lab5->resize(140, 60);
 	lab5->move(260, 0);
-	QLabel* lab6 = new QLabel("data2", infoWidget);
+
+	lab6 = new QLabel("0", infoWidget);
 	lab6->setFont(font2);
 	lab6->setAlignment(Qt::AlignRight | Qt::AlignVCenter);	//居中右对齐
 	lab6->resize(140, 60);
 	lab6->move(260, 60);
-	QLabel* lab7 = new QLabel("data3", infoWidget);
+
+	lab7 = new QLabel("data3", infoWidget);
 	lab7->setFont(font2);
 	lab7->setAlignment(Qt::AlignRight | Qt::AlignVCenter);	//居中右对齐
 	lab7->resize(140, 60);
 	lab7->move(260, 120);
-	QLabel* lab8 = new QLabel("data4", infoWidget);
+
+	lab8 = new QLabel("data4", infoWidget);
 	lab8->setFont(font2);
 	lab8->setAlignment(Qt::AlignRight | Qt::AlignVCenter);	//居中右对齐
 	lab8->resize(140, 60);
 	lab8->move(260, 180);
 
+}
+
+void MainWindow::update()
+{
+	QString vexes_str = QString::asprintf("%d", this->displayWidget->view()->vexList.size());
+	QString edges_str = QString::asprintf("%d", this->displayWidget->view()->lineList.size());
+	this->lab5->setText(vexes_str);
+	this->lab6->setText(edges_str);
 }
 
 //signal slots

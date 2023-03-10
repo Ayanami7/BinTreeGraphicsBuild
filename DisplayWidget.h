@@ -5,6 +5,9 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
+#include "GraphicTree.h"
+
+
 class DisplayWidget : public QWidget
 {
 	Q_OBJECT
@@ -15,6 +18,10 @@ public:
 
 	virtual void paintEvent(QPaintEvent* event);
 
+	GraphicTreeView* view();
+
 private:
 	int Radius;
+	GraphicTreeView* myView = nullptr;
+
 };
