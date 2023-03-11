@@ -9,6 +9,12 @@ MainWindow::MainWindow(QWidget *parent)
 	setWindowFlags(Qt::FramelessWindowHint);
 	setAttribute(Qt::WA_TranslucentBackground);
 
+	//窗口居中
+	QDesktopWidget* desk = QApplication::desktop();
+	int wd = desk->width();
+	int ht = desk->height();
+	this->move((wd - width()) / 2, (ht - height()) / 2);
+
 	//close button
 	MyButton* closeBtn = new MyButton(":/image/resource/img/close.png", 40);
 	closeBtn->setParent(this);
@@ -54,8 +60,9 @@ MainWindow::MainWindow(QWidget *parent)
 	//property bar
 	this->setPropertyWidget();
 	connect(displayWidget->view(), &GraphicTreeView::itemChange, this, &MainWindow::updateUpHalf);
+	connect(displayWidget->view(), &GraphicTreeView::vexChange, this, &MainWindow::updateDownHalf);
 
-	QFont font1("Sitka Display", 18, 50);
+	QFont font1("Sitka Display", 20, 50, true);
 
 	traverBtn1 = new QPushButton();
 	traverBtn1->setText("pred");
@@ -101,13 +108,29 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(traverBtn4, &QPushButton::clicked, this, [=]() {this->displayWidget->view()->Type() = 4; });
 	connect(traverBtn4, &QPushButton::clicked, this, &MainWindow::changeType);
 
+	//构建时改变按钮状态S
 	connect(this->displayWidget->view(), &GraphicTreeView::build, this, &MainWindow::changeType);
 
+	//switch button
+	MyButton* switchBtn = new MyButton(":/image/resource/img/switch.png", 80);
+	switchBtn->setParent(this);
+	switchBtn->move(1210, 720);
+	connect(switchBtn, &MyButton::clicked, displayWidget->view(), &GraphicTreeView::reset);
+
 	//start button
-	MyButton* startBtn = new MyButton(":/image/resource/img/start.png", 90);
+	MyButton* startBtn = new MyButton(":/image/resource/img/start.png", 80);
 	startBtn->setParent(this);
-	startBtn->move(1300, 670);
+	startBtn->move(1330, 720);
 	connect(startBtn, &MyButton::clicked, displayWidget->view(), &GraphicTreeView::startTraversal);
+
+	//delete button
+	MyButton* deleteBtn = new MyButton(":/image/resource/img/delete.png", 80);
+	deleteBtn->setParent(this);
+	deleteBtn->move(1450, 720);
+	connect(deleteBtn,&MyButton::clicked, this, &MainWindow::resetType);
+	connect(deleteBtn, &MyButton::clicked, displayWidget->view(), &GraphicTreeView::deleteAll);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -254,13 +277,13 @@ void MainWindow::setPropertyWidget()
 	lab6->resize(140, 60);
 	lab6->move(260, 60);
 
-	lab7 = new QLabel("data3", infoWidget);
+	lab7 = new QLabel("0", infoWidget);
 	lab7->setFont(font2);
 	lab7->setAlignment(Qt::AlignRight | Qt::AlignVCenter);	//居中右对齐
 	lab7->resize(140, 60);
 	lab7->move(260, 120);
 
-	lab8 = new QLabel("data4", infoWidget);
+	lab8 = new QLabel("nullptr", infoWidget);
 	lab8->setFont(font2);
 	lab8->setAlignment(Qt::AlignRight | Qt::AlignVCenter);	//居中右对齐
 	lab8->resize(140, 60);
@@ -270,11 +293,22 @@ void MainWindow::setPropertyWidget()
 
 void MainWindow::updateUpHalf()
 {
-	QString vexes_str = QString::asprintf("%d", this->displayWidget->view()->vexSize());
-	QString edges_str = QString::asprintf("%d", this->displayWidget->view()->lineSize());
+	QString vexes_str = QString::number(this->displayWidget->view()->vexSize());
+	QString edges_str = QString::number(this->displayWidget->view()->lineSize());
 	this->lab5->setText(vexes_str);
 	this->lab6->setText(edges_str);
 }
+
+void MainWindow::updateDownHalf(GraphicTreeVertex* vex, int depth)
+{
+	QString depth_str = QString::number(depth);
+	this->lab7->setText(depth_str);
+	if (vex != nullptr)
+		this->lab8->setText(vex->nameText);
+	else
+		this->lab8->setText("nullptr");
+}
+
 
 void MainWindow::changeType()
 {

@@ -1,5 +1,6 @@
 #include "GraphicTree.h"
 #include <qdebug.h>
+#include <windows.h>
 
 /* function of class GraphicTreeView */
 GraphicTreeView::GraphicTreeView()
@@ -71,10 +72,33 @@ void GraphicTreeView::mousePressEvent(QMouseEvent* event)
 			endVex->showAnimation();
 			addLine(strtVex, endVex);
 			emit itemChange();
-			if (endVex->center.x() <= strtVex->center.x())
+			if (strtVex->left == nullptr)
 				strtVex->left = endVex;
 			else
 				strtVex->right = endVex;
+			
+			/* 检查左右子节点 */
+			if (!hasVacancy(strtVex))
+			{
+				if (strtVex->left->center.x() > strtVex->right->center.x())
+				{
+					std::swap(strtVex->left, strtVex->right);
+				}
+			}
+			else if (strtVex->left == nullptr && strtVex->right != nullptr)
+			{
+				if (strtVex->right->center.x() < strtVex->center.x())
+				{
+					std::swap(strtVex->left, strtVex->right);
+				}
+			}
+			else if (strtVex->left != nullptr && strtVex->right == nullptr)
+			{
+				if (strtVex->left->center.x() > strtVex->center.x())
+				{
+					std::swap(strtVex->left, strtVex->right);
+				}
+			}
 			isCreating = !isCreating;
 		}
 		else
@@ -141,49 +165,145 @@ void GraphicTreeView::clearSketchLine()
 	}
 }
 
-void GraphicTreeView::predTraversal(GraphicTreeVertex* vex)
+void GraphicTreeView::predTraversal(GraphicTreeVertex* vex, int depth)
 {
 	if (vex == nullptr)
 		return;
-	qDebug() << vex->nameText;
-	predTraversal(vex->left);
-	predTraversal(vex->right);
+	/* process the current node */
+	animeQueue.push_back(vex->visit());
+	vexQueue.push_back(vex);
+	depthQueue.push_back(depth);
+	resList.push_back(vex);
+	/* End */
+	predTraversal(vex->left, depth + 1);
+	predTraversal(vex->right, depth + 1);
 }
 
-void GraphicTreeView::inTraversal(GraphicTreeVertex* vex)
+void GraphicTreeView::inTraversal(GraphicTreeVertex* vex, int depth)
 {
 	if (vex == nullptr)
 		return;
-	inTraversal(vex->left);
-	qDebug() << vex->nameText;
-	inTraversal(vex->right);
+	inTraversal(vex->left, depth + 1);
+	/* process the current node */
+	animeQueue.push_back(vex->visit());
+	vexQueue.push_back(vex);
+	depthQueue.push_back(depth);
+	resList.push_back(vex);
+	/* End */
+	inTraversal(vex->right, depth + 1);
 }
 
-void GraphicTreeView::succTraversal(GraphicTreeVertex* vex)
+void GraphicTreeView::succTraversal(GraphicTreeVertex* vex, int depth)
 {
 	if (vex == nullptr)
 		return;
-	succTraversal(vex->left);
-	succTraversal(vex->right);
-	qDebug() << vex->nameText;
+	succTraversal(vex->left, depth + 1);
+	succTraversal(vex->right, depth + 1);
+	/* process the current node */
+	animeQueue.push_back(vex->visit());
+	vexQueue.push_back(vex);
+	depthQueue.push_back(depth);
+	resList.push_back(vex);
+	/* End */
 }
 
 void GraphicTreeView::orderTraversal(GraphicTreeVertex* vex)
 {
+	QQueue<GraphicTreeVertex*> queue;
+	queue.push_back(vex);
+	GraphicTreeVertex* temp;
+	int depth = 0;
+	while (!queue.empty())
+	{
+		depth++;
+		int count = 0;
+		int size = queue.size();
+		while (count < size)
+		{
+			temp = queue.front();
+			queue.pop_front();
+			count++;
+			/* process the current node */
+			animeQueue.push_back(temp->visit());
+			depthQueue.push_back(depth);
+			vexQueue.push_back(temp);
+			resList.push_back(temp);
+			/* End */
+			if (temp->left != nullptr)
+			{
+				queue.push_back(temp->left);
+			}
+			if (temp->right != nullptr)
+			{
+				queue.push_back(temp->right);
+			}
+		}
 
+
+	}
 }
 
 void GraphicTreeView::startTraversal()
 {
-	emit build();					//通知系统开始构建二叉树
-	if (traversalType == 1 || 0)	//若不选择则默认为先序
-		predTraversal(root);
-	else if (traversalType == 2)
-		inTraversal(root);
-	else if (traversalType == 3)
-		succTraversal(root);
-	else if (traversalType == 4)
-		orderTraversal(root);
+	if (!isbuild)
+	{
+		isbuild = !isbuild;
+		emit build();					//通知系统开始构建二叉树
+		if (traversalType == 1 || traversalType == 0)	//若不选择则默认为先序
+			predTraversal(root, 1);
+		else if (traversalType == 2)
+			inTraversal(root, 1);
+		else if (traversalType == 3)
+			succTraversal(root, 1);
+		else if (traversalType == 4)
+			orderTraversal(root);
+		playAnimation();
+	}
+}
+
+void GraphicTreeView::playAnimation()
+{
+	if (animeQueue.size() > 0)
+	{
+		QTimeLine* next = animeQueue.front();
+		connect(next, &QTimeLine::finished, [=]() {playAnimation(); next->deleteLater(); });
+		emit vexChange(vexQueue.front(), depthQueue.front());
+		animeQueue.pop_front();
+		vexQueue.pop_front();
+		depthQueue.pop_front();
+
+		//next->setDuration(next->duration());
+		next->start();
+	}
+}
+
+void GraphicTreeView::reset()
+{
+	isbuild = false;
+	resList.clear();
+	for (int i = 0; i < vexList.size(); i++)
+	{
+		vexList[i]->setBrush(regBrush);
+	}
+	emit vexChange(nullptr, 0);
+}
+
+void GraphicTreeView::deleteAll()
+{
+	isbuild = false;
+	this->myScene->clear();
+	resList.clear();
+	vexList.clear();
+	lineList.clear();
+
+	traversalType = 0;
+	VexID = 0;
+	isCreating = false;
+	sketchItem = nullptr;
+	root = addVex(QPoint(525, 120));
+	strtVex = root;
+	emit vexChange(nullptr, 0);		//改变属性栏后两行
+	emit itemChange();				//前两行
 }
 
 
@@ -208,6 +328,21 @@ GraphicTreeVertex::GraphicTreeVertex(QPointF point, qreal r, int nameID, QGraphi
 GraphicTreeVertex::~GraphicTreeVertex()
 {
 
+}
+
+QTimeLine* GraphicTreeVertex::visit()
+{
+	QTimeLine* timeLine = new QTimeLine(600, this);
+	timeLine->setFrameRange(0, 200);
+	QEasingCurve curve = QEasingCurve::OutBounce;
+	qreal difRadius = 6;
+	connect(timeLine, &QTimeLine::frameChanged, timeLine, [=](int frame) {
+		this->setBrush(visitedBrush);
+		qreal curProgress = curve.valueForProgress(frame / 200.0);
+		qreal curRadius = radius + difRadius - difRadius * curProgress;
+		this->setRect(QRectF(center.x() - curRadius, center.y() - curRadius, curRadius * 2, curRadius * 2));
+		});
+	return timeLine;
 }
 
 void GraphicTreeVertex::showAnimation()

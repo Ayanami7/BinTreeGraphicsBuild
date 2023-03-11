@@ -6,7 +6,8 @@
 #include <QGraphicsSimpleTextItem>
 #include <QMouseEvent>
 
-#include <QTime>
+#include <QQueue>
+#include <QTimer>
 #include <QTimeLine>
 
 class GraphicTreeView;
@@ -17,20 +18,20 @@ class GraphicTreeLine;
 class GraphicTreeView : public QGraphicsView
 {
 	Q_OBJECT
-
+	friend class MainWindow;
 private:
 	QGraphicsScene* myScene;	//场景对象
 	QBrush regBrush = QBrush(QColor(108, 166, 205));
 
-	QTime* timer = nullptr;
+	bool isbuild = false;
 
 	/* For creating a binary tree */
 	int traversalType = 0;
 	int VexID = 0;
 	bool isCreating = false;
 	GraphicTreeVertex* root = nullptr;
-	GraphicTreeVertex* strtVex = nullptr;
-	QGraphicsItem* sketchItem = nullptr;
+	GraphicTreeVertex* strtVex = nullptr;		//上一个顶点
+	QGraphicsItem* sketchItem = nullptr;		//虚线
 
 	GraphicTreeVertex* addVex(QPointF center, qreal radius = 15);
 	GraphicTreeLine* addLine(GraphicTreeVertex* start, GraphicTreeVertex* end);
@@ -42,20 +43,32 @@ private:
 	bool inVertex(QPoint pos, GraphicTreeVertex* vex);			//判断是否位于顶点内
 	void drawSketchLine(QPointF start, QPointF end);	//绘制虚线
 	void clearSketchLine();							//擦除虚线
-	void predTraversal(GraphicTreeVertex* vex);		//四种遍历方式
-	void inTraversal(GraphicTreeVertex* vex);
-	void succTraversal(GraphicTreeVertex* vex);
-	void orderTraversal(GraphicTreeVertex* vex);
+	void predTraversal(GraphicTreeVertex* vex, int depth);		//前序遍历
+	void inTraversal(GraphicTreeVertex* vex, int depth);		//中序遍历
+	void succTraversal(GraphicTreeVertex* vex, int depth);		//后序遍历
+	void orderTraversal(GraphicTreeVertex* vex);	//层次遍历
+	void playAnimation();							//播放动画
+
+	QQueue<QTimeLine*> animeQueue;			//依次执行动画队列
+	QQueue<GraphicTreeVertex*> vexQueue;	//顶点队列
+	QQueue<int> depthQueue;					//深度队列
+	QVector<GraphicTreeVertex*> resList;	//结果序列
 
 	QVector<GraphicTreeVertex*> vexList;	//总结点列表
 	QVector<GraphicTreeLine*> lineList;		//总边列表
 
+	GraphicTreeVertex* currentVex;			//当前节点
+
 signals:
-	void itemChange();
-	void build();
+	void itemChange();					//节点添加
+	void build();						//开始构建
+	void vexChange(GraphicTreeVertex* vex, int depth);	//节点被访问
+
 
 public slots:
 	void startTraversal();
+	void reset();
+	void deleteAll();
 
 public:
 
@@ -95,6 +108,8 @@ public:
 
 	void showAnimation();		//显示动画
 
+	QTimeLine* visit();			//访问并创建时间线动画
+
 	GraphicTreeVertex(QPointF point, qreal r, int nameID, QGraphicsItem* parent = nullptr);
 	~GraphicTreeVertex();
 };
@@ -107,7 +122,6 @@ private:
 	qreal linewidth = 3;
 	Qt::PenStyle lineStyle = Qt::SolidLine;
 	Qt::PenCapStyle lineCapStyle = Qt::RoundCap;	//画笔端点风格
-	//QColor defaultColor = QColor(159, 182, 205);
 	QColor defaultColor = QColor(0,238,238);
 
 	QPen defaultPen;

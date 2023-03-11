@@ -8,6 +8,8 @@
         <file>resource/img/github2.png</file>
         <file>resource/img/more.png</file>
         <file>resource/img/atri.png</file>
+        <file>resource/img/delete.png</file>
         <file>resource/img/start.png</file>
+        <file>resource/img/switch.png</file>
     </qresource>
 </RCC>

@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QPixMap>
 #include <QTimer>
+#include <QDesktopWidget>
 #include "ui_MainWindow.h"
 #include "MyButton.h"
 #include "MyDialog.h"
@@ -32,8 +33,6 @@ public:
 	virtual void paintEvent(QPaintEvent* event);
 
 private:
-	void resetType();
-
 	void setGitDialog();
 	void setLogDialog();
 	void setPropertyWidget();
@@ -43,8 +42,9 @@ protected slots:
 	void openGitDialog();
 	void openLogDialog();
 	void updateUpHalf();
-	//void updateDownHalf();
-	void changeType();
+	void updateDownHalf(GraphicTreeVertex* vex, int depth);
+	void changeType();		//改变遍历状态	（主要体现在按钮是否被按下）
+	void resetType();		//重置遍历状态
 
 private:
 	int Radius = 30;
