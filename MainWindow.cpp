@@ -10,10 +10,11 @@ MainWindow::MainWindow(QWidget *parent)
 	setAttribute(Qt::WA_TranslucentBackground);
 
 	//窗口居中
-	QDesktopWidget* desk = QApplication::desktop();
-	int wd = desk->width();
-	int ht = desk->height();
-	this->move((wd - width()) / 2, (ht - height()) / 2);
+	QRect screenRect = QGuiApplication::primaryScreen()->geometry();
+	double devicePixelRatio = QGuiApplication::primaryScreen()->devicePixelRatio();
+	int screenW = screenRect.width();
+	int screenH = screenRect.height();
+	this->move((screenW - width()) / 2, (screenH - height()) / 2);
 
 	//close button
 	MyButton* closeBtn = new MyButton(":/image/resource/img/close.png", 40);
@@ -28,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(settingBtn, &MyButton::clicked, this, &MainWindow::openMenu);
 
 	//log button and Widget
-	this->setLogDialog();
+	this->setResDialog();
 
 	//GitHub button and Widget
 	this->setGitDialog();
@@ -50,6 +51,8 @@ MainWindow::MainWindow(QWidget *parent)
 	menuWidget = new MenuWidget(500, 960, 25, this);
 	menuWidget->move(-menuWidget->width(), 0);
 	slideProperty = new QPropertyAnimation(menuWidget, "geometry");
+	QLabel* sens = new QLabel("也没写完", menuWidget);
+	sens->move(resDialog->width() / 2, menuWidget->height() / 2);
 
 	//close menuwidget button
 	MyButton* closeMenuBtn = new MyButton(":/image/resource/img/closeMenu.png", 40);
@@ -68,8 +71,9 @@ MainWindow::MainWindow(QWidget *parent)
 	traverBtn1->setText("pred");
 	traverBtn1->setParent(this);
 	traverBtn1->setFont(font1);
-	traverBtn1->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
-		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+	//QT6的QSS写法存在不同，如rgb应写作rgba，颜色饱和度由整数（百分比）改为小数
+	traverBtn1->setStyleSheet("QPushButton {background-color: rgba(121,205,205,0.4);border-radius: 15px;}"
+		"QPushButton:hover {background-color: rgba(119,136,153,0.6);}");
 	traverBtn1->resize(180, 60);
 	traverBtn1->move(1170, 500);
 	connect(traverBtn1, &QPushButton::clicked, this, [=]() {this->displayWidget->view()->Type() = 1; });
@@ -79,8 +83,8 @@ MainWindow::MainWindow(QWidget *parent)
 	traverBtn2->setText("in");
 	traverBtn2->setParent(this);
 	traverBtn2->setFont(font1);
-	traverBtn2->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
-		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+	traverBtn2->setStyleSheet("QPushButton {background-color: rgba(121,205,205,0.4);border-radius: 15px;}"
+		"QPushButton:hover {background-color: rgba(119,136,153,0.6);}");
 	traverBtn2->resize(180, 60);
 	traverBtn2->move(1380, 500);
 	connect(traverBtn2, &QPushButton::clicked, this, [=]() {this->displayWidget->view()->Type() = 2; });
@@ -90,8 +94,8 @@ MainWindow::MainWindow(QWidget *parent)
 	traverBtn3->setText("succ");
 	traverBtn3->setParent(this);
 	traverBtn3->setFont(font1);
-	traverBtn3->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
-		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+	traverBtn3->setStyleSheet("QPushButton {background-color: rgba(121,205,205,0.4);border-radius: 15px;}"
+		"QPushButton:hover {background-color: rgba(119,136,153,0.6);}");
 	traverBtn3->resize(180, 60);
 	traverBtn3->move(1170, 580);
 	connect(traverBtn3, &QPushButton::clicked, this, [=]() {this->displayWidget->view()->Type() = 3; });
@@ -101,8 +105,8 @@ MainWindow::MainWindow(QWidget *parent)
 	traverBtn4->setText("order");
 	traverBtn4->setParent(this);
 	traverBtn4->setFont(font1);
-	traverBtn4->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
-		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+	traverBtn4->setStyleSheet("QPushButton {background-color: rgba(121,205,205,0.4);border-radius: 15px;}"
+		"QPushButton:hover {background-color: rgba(119,136,153,0.6);}");
 	traverBtn4->resize(180, 60);
 	traverBtn4->move(1380, 580);
 	connect(traverBtn4, &QPushButton::clicked, this, [=]() {this->displayWidget->view()->Type() = 4; });
@@ -204,7 +208,7 @@ void MainWindow::setGitDialog()
 
 	gitDialog = new MyDialog(540, 320, 20, this);
 	gitDialog->setCloseBtn();
-	connect(gitBtn, &MyButton::clicked, this, &MainWindow::openGitDialog);
+	connect(gitBtn, &MyButton::clicked, this, [=]() {gitDialog->show(); });
 
 	QLabel* lab1 = new QLabel(tr("<a href = https://github.com/Ayanami7/BinTreeGraphicsBuild><img src=:/image/resource/img/atri.png width =128 height=128></a>"), gitDialog);
 	lab1->setGeometry(206, 50, 128, 128);
@@ -221,15 +225,19 @@ void MainWindow::setGitDialog()
 	lab2->setOpenExternalLinks(true);
 }
 
-void MainWindow::setLogDialog()
+void MainWindow::setResDialog()
 {
-	MyButton* logBtn = new MyButton(":/image/resource/img/more.png", 50);
-	logBtn->setParent(this);
-	logBtn->move(1370, 890);
+	MyButton* resBtn = new MyButton(":/image/resource/img/more.png", 50);
+	resBtn->setParent(this);
+	resBtn->move(1370, 890);
 
-	logDialog = new MyDialog(400, 800, 20, this);
-	logDialog->setCloseBtn();
-	connect(logBtn, &MyButton::clicked, this, &MainWindow::openLogDialog);
+	resDialog = new MyDialog(450, 400, 20, this);
+	resDialog->setCloseBtn();
+	resDialog->move(1300, 180);
+	connect(resBtn, &MyButton::clicked, this, [=]() {resDialog->show(); });
+
+	QLabel* sens = new QLabel("还没写完", resDialog);
+	sens->move(resDialog->width() / 2, resDialog->height() / 2);
 
 }
 
@@ -315,46 +323,46 @@ void MainWindow::changeType()
 	if (this->displayWidget->view()->Type() == 1)
 	{
 		resetType();
-		traverBtn1->setStyleSheet("QPushButton{background-color: rgb(119,136,153,150); border-radius: 15px;}"
-			"QPushButton:hover{background-color: rgb(121,205,205,90);}");
+		traverBtn1->setStyleSheet("QPushButton{background-color: rgba(119,136,153,0.6); border-radius: 15px;}"
+			"QPushButton:hover{background-color: rgba(119,136,153,0.6);}");
 	}
 	else if (this->displayWidget->view()->Type() == 2)
 	{
 		resetType();
-		traverBtn2->setStyleSheet("QPushButton{background-color: rgb(119,136,153,150); border-radius: 15px;}"
-			"QPushButton:hover{background-color: rgb(121,205,205,90);}");
+		traverBtn2->setStyleSheet("QPushButton{background-color: rgba(119,136,153,0.6); border-radius: 15px;}"
+			"QPushButton:hover{background-color: rgba(119,136,153,0.6);}");
 	}
 
 	else if (this->displayWidget->view()->Type() == 3)
 	{
 		resetType();
-		traverBtn3->setStyleSheet("QPushButton{background-color: rgb(119,136,153,150); border-radius: 15px;}"
-			"QPushButton:hover{background-color: rgb(121,205,205,90);}");
+		traverBtn3->setStyleSheet("QPushButton{background-color: rgba(119,136,153,0.6); border-radius: 15px;}"
+			"QPushButton:hover{background-color: rgba(119,136,153,0.6);}");
 	}
 
 	else if (this->displayWidget->view()->Type() == 4)
 	{
 		resetType();
-		traverBtn4->setStyleSheet("QPushButton{background-color: rgb(119,136,153,150); border-radius: 15px;}"
-			"QPushButton:hover{background-color: rgb(121,205,205,90);}");
+		traverBtn4->setStyleSheet("QPushButton{background-color: rgba(119,136,153,0.6); border-radius: 15px;}"
+			"QPushButton:hover{background-color: rgba(119,136,153,0.6);}");
 	}
 	else
 	{
-		traverBtn1->setStyleSheet("QPushButton{background-color: rgb(119,136,153,150); border-radius: 15px;}"
-			"QPushButton:hover{background-color: rgb(121,205,205,90);}");
+		traverBtn1->setStyleSheet("QPushButton{background-color: rgba(119,136,153,0.6); border-radius: 15px;}"
+			"QPushButton:hover{background-color: rgba(119,136,153,0.6);}");
 	}
 }
 
 void MainWindow::resetType()
 {
-	traverBtn1->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
-		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
-	traverBtn2->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
-		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
-	traverBtn3->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
-		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
-	traverBtn4->setStyleSheet("QPushButton{background-color: rgb(121,205,205,90); border-radius: 15px;}"
-		"QPushButton:hover{background-color: rgb(119,136,153,150);}");
+	traverBtn1->setStyleSheet("QPushButton {background-color: rgba(121,205,205,0.4);border-radius: 15px;}"
+		"QPushButton:hover {background-color: rgba(119,136,153,0.6);}");
+	traverBtn2->setStyleSheet("QPushButton {background-color: rgba(121,205,205,0.4);border-radius: 15px;}"
+		"QPushButton:hover {background-color: rgba(119,136,153,0.6);}");
+	traverBtn3->setStyleSheet("QPushButton {background-color: rgba(121,205,205,0.4);border-radius: 15px;}"
+		"QPushButton:hover {background-color: rgba(119,136,153,0.6);}");
+	traverBtn4->setStyleSheet("QPushButton {background-color: rgba(121,205,205,0.4);border-radius: 15px;}"
+		"QPushButton:hover {background-color: rgba(119,136,153,0.6);}");
 }
 
 
@@ -378,14 +386,3 @@ void MainWindow::openMenu()
 		m_menu_hidden = !m_menu_hidden;
 	}
 }
-
-void MainWindow::openGitDialog()
-{
-	gitDialog->exec();
-}
-
-void MainWindow::openLogDialog()
-{
-	logDialog->show();
-}
-

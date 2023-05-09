@@ -9,7 +9,7 @@
 #include <QLabel>
 #include <QPixMap>
 #include <QTimer>
-#include <QDesktopWidget>
+#include <QGuiApplication>
 #include "ui_MainWindow.h"
 #include "MyButton.h"
 #include "MyDialog.h"
@@ -34,13 +34,11 @@ public:
 
 private:
 	void setGitDialog();
-	void setLogDialog();
+	void setResDialog();
 	void setPropertyWidget();
 
 protected slots:
 	void openMenu();
-	void openGitDialog();
-	void openLogDialog();
 	void updateUpHalf();
 	void updateDownHalf(GraphicTreeVertex* vex, int depth);
 	void changeType();		//改变遍历状态	（主要体现在按钮是否被按下）
@@ -61,7 +59,7 @@ private:
 	QPushButton* traverBtn3;
 	QPushButton* traverBtn4;
 
-	MyDialog* logDialog;
+	MyDialog* resDialog;
 	MyDialog* gitDialog;
 	DisplayWidget* displayWidget;
 	MenuWidget* menuWidget;
